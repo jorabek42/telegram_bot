@@ -26,7 +26,6 @@ from handlers.users.new_chat_members import rt as members
 from handlers.users.photo import rt as photo
 from handlers.users.new_title import rt as title
 from keyboads.tugma_inline import router as tugma_inline
-
 dp = Dispatcher()
 async def main():
     bot = Bot(BOT_TOKEN)
@@ -50,7 +49,6 @@ async def main():
     # dp.include_router(photo)
     # dp.include_router(title)
     dp.include_router(tugma_inline)
-
 
     #
     # dp.include_router(test)

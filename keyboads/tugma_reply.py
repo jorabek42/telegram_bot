@@ -11,22 +11,34 @@ def tugma():
         request_id=435,
         user_is_bot=False,
     ))
+    b.button(text="gurpa yoki bot", request_chat=KeyboardButtonRequestChat(
+        request_id=4396,
+        user_is_premium=False,
+    ))
     b.button(text="user yoki bot", request_users=KeyboardButtonRequestUsers(
         request_id=425,
         user_is_bot=True
     ))
-    b.button(text="kanal", request_chat=KeyboardButtonRequestChat(
+    b.button(text="kanal yoki gurpa", request_chat=KeyboardButtonRequestChat(
         request_id=4236,
         chat_is_channel=True,
+
     ))
-    b.button(text="gurpa", request_chat=KeyboardButtonRequestChat(
-        request_id=42236,
-        chat_is_channel=False,
+
+    b.button(text="kanal yoki gurpa", request_chat=KeyboardButtonRequestChat(
+        request_id=4396,
+        chat_is_forum=False,
     ))
-    b.button(text="gurpa", request_chat=KeyboardButtonRequestChat(
-        request_id=436,
-        chat_is_channel=True,
+    b.button(text="kanal yoki gurpa", request_chat=KeyboardButtonRequestChat(
+        request_id=906,
+        chat_has_username=True,
     ))
+    b.button(text="kanal yoki gurpa", request_chat=KeyboardButtonRequestChat(
+        request_id=9069,
+        bot_is_member=False,
+    ))
+
+
 
 
     b.adjust(3)
