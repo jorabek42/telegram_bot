@@ -1,5 +1,5 @@
 from aiogram import F, Router, filters, types
-from keyboads.tugma_reply import tugma
+from keyboards.tugma_reply import tugma
 
 rt = Router()
 

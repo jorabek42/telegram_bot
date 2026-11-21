@@ -25,17 +25,20 @@ from handlers.users.hamma_kod import rt as kodlar
 from handlers.users.new_chat_members import rt as members
 from handlers.users.photo import rt as photo
 from handlers.users.new_title import rt as title
-from keyboads.tugma_inline import router as tugma_inline
+from keyboards.tugma_inline import router as tugma_inline
 from handlers.users.tugma import rt as tugmaa
 from handlers.users.tugmalar import rt as tugmalar
+from handlers.users.turbek import rt as turbek
+from handlers.users.avtosalon import router as avtosalon
+
 dp = Dispatcher()
 async def main():
     bot = Bot(BOT_TOKEN)
-    dp.include_router(start)
+    # dp.include_router(start)
     # dp.include_router(help)
     # dp.include_router(rasm)
     # dp.include_router(me)
-    dp.include_router(soat)
+    # dp.include_router(soat)
     # dp.include_router(chat_id)
     # dp.include_router(photo)
     # dp.include_router(ovoz)
@@ -52,9 +55,9 @@ async def main():
     # dp.include_router(title)
     # dp.include_router(tugma_inline)
     # dp.include_router(tugmaa)
-    dp.include_router(tugmalar)
-
-
+    # dp.include_router(tugmalar)
+    # dp.include_router(turbek)
+    dp.include_router(avtosalon)
 
 
 
