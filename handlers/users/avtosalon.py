@@ -34,20 +34,19 @@ RANGLAR = ["⚪️ Oq", "⚫️ Qora", "🔘 Mokriy asfalt", "🥈 Kumushrang"]
 
 
 def togri_raqammi(text: str) -> bool:
-    # Masalan: 01A777AA, 01 A 777 AA, 777AAA kabi ko'rinishlarni tekshiradi
+    # Masalan: 01 A 777 AA, 01A777AA yoki 777AAA formatini tekshiradi
     cleaned = re.sub(r"\s+", "", text.upper())
     return bool(re.fullmatch(r"(?:\d{2})?[A-Z]\d{3}[A-Z]{2}|\d{3}[A-Z]{3}", cleaned))
 
 
 def togri_pulmi(text: str) -> bool:
-    # Bo'sh joy, vergul, nuqta olib tashlanganda faqat raqam bo'lishi kerak
     cleaned = text.replace(" ", "").replace(",", "").replace(".", "")
     return cleaned.isdigit() and int(cleaned) > 0
 
 
 def togri_telmi(text: str) -> bool:
     digits = re.sub(r"\D", "", text)
-    return len(digits) in (9, 12)  # 901234567 yoki 998901234567
+    return len(digits) in (9, 12)
 
 
 @router.message(CommandStart())
@@ -72,6 +71,9 @@ async def turi(m: types.Message, state: FSMContext):
 async def nomi(m: types.Message, state: FSMContext):
     if m.text == "⬅️ Orqaga":
         return await start(m, state)
+    turi_val = (await state.get_data()).get("turi")
+    if m.text not in TURLAR.get(turi_val, []):
+        return await m.answer("Mashina nomini tugmadan tanlang.")
     await state.update_data(nomi=m.text)
     rows = [RANGLAR[i : i + 2] for i in range(0, len(RANGLAR), 2)]
     await m.answer("Rangini tanlang:", reply_markup=kb(*rows))
@@ -80,6 +82,8 @@ async def nomi(m: types.Message, state: FSMContext):
 
 @router.message(Form.rangi)
 async def rangi(m: types.Message, state: FSMContext):
+    if m.text not in RANGLAR:
+        return await m.answer("Rangni pastdagi tugmalardan tanlang!")
     await state.update_data(rangi=m.text)
     await m.answer("Mashina raqamini yozing (masalan: 01 A 777 AA):", reply_markup=ReplyKeyboardRemove())
     await state.set_state(Form.raqami)
@@ -88,7 +92,7 @@ async def rangi(m: types.Message, state: FSMContext):
 @router.message(Form.raqami)
 async def raqami(m: types.Message, state: FSMContext):
     if not m.text or not togri_raqammi(m.text):
-        return await m.answer("Raqamni noto'g'ri kiritdingiz! Masalan: 01 A 777 AA ko'rinishida qayta kiriting:")
+        return await m.answer("Raqam noto'g'ri! Qayta kiriting (masalan: 01 A 777 AA):")
     await state.update_data(raqami=m.text.upper())
     await m.answer("Puli (byudjeti) qancha? (Faqat raqamda yozing, masalan: 250000000)")
     await state.set_state(Form.puli)
@@ -97,7 +101,7 @@ async def raqami(m: types.Message, state: FSMContext):
 @router.message(Form.puli)
 async def puli(m: types.Message, state: FSMContext):
     if not m.text or not togri_pulmi(m.text):
-        return await m.answer("Pulni noto'g'ri kiritdingiz! Faqat raqam bilan qayta kiriting (masalan: 250000000):")
+        return await m.answer("Pulni noto'g'ri kiritdingiz! Faqat raqam bilan qayta kiriting:")
     await state.update_data(puli=m.text.strip())
     await m.answer("Telefon raqamingizni yuboring:", reply_markup=kb(["📱 Raqamni yuborish"], contact=True))
     await state.set_state(Form.tel)
